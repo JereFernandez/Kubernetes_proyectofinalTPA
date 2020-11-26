@@ -30,9 +30,7 @@ spring.datasource.url=jdbc:mysql://mysql-container/api-persona?useUnicode=true&u
 spring.datasource.username=apipersona
 spring.datasource.password=pwdapi
 
-spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.show-sql=true spring.jpa.hibernate.ddl-auto=update spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
 
 #Variable de entorno
 server.port=9000
