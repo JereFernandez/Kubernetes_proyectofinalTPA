@@ -2,6 +2,13 @@ package com.example.persona.Controllers;
 
 import com.example.persona.Entities.Base;
 import com.example.persona.services.BaseServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,7 +22,16 @@ public abstract class BaseControllerImpl<E extends Base, S extends BaseServiceIm
     @Autowired
     protected S servicio;
 
+    @Operation(summary = "Este método devuelve una lista de objetos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+            description = "trae una lista de objetos del Controller correspondiente",
+            content = {@Content}),
+            @ApiResponse(responseCode = "404",
+            description = "el controlador no se encuentra, o no es posible comunicarse con la base de datos",
+            content = @Content)
 
+    })
     @GetMapping("")
     public ResponseEntity<?> getAll(){
         try{
@@ -34,6 +50,16 @@ public abstract class BaseControllerImpl<E extends Base, S extends BaseServiceIm
         }
     }
 
+    @Operation(summary = "Este método devuelve un objeto", parameters = @Parameter(name = "id", in = ParameterIn.PATH, required = true, schema = @Schema( type = "Long")))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "trae un objeto del Controller correspondiente",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "el controlador no se encuentra, o no es posible comunicarse con la base de datos",
+                    content = @Content)
+
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id){
         try{
@@ -43,6 +69,17 @@ public abstract class BaseControllerImpl<E extends Base, S extends BaseServiceIm
         }
     }
 
+
+    @Operation(summary = "Este método guarda un objeto", parameters = @Parameter(name = "entity", in = ParameterIn.PATH, required = true, schema = @Schema( type = "Object")))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "guarda un objeto en la base de datos",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "el controlador no se encuentra, o no es posible comunicarse con la base de datos",
+                    content = @Content)
+
+    })
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody E entity){
         try{
@@ -52,6 +89,16 @@ public abstract class BaseControllerImpl<E extends Base, S extends BaseServiceIm
         }
     }
 
+    @Operation(summary = "Este método recibe un id y actualiza el objeto asociado", parameters = @Parameter(name = "id", in = ParameterIn.PATH, required = true, schema = @Schema( type = "Long")))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "actualiza un objeto en la base de datos",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "el controlador no se encuentra, o no es posible comunicarse con la base de datos",
+                    content = @Content)
+
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,@RequestBody E entity){
         try{
@@ -61,6 +108,16 @@ public abstract class BaseControllerImpl<E extends Base, S extends BaseServiceIm
         }
     }
 
+    @Operation(summary = "Este método recibe un id y elimina el objeto asociado", parameters = @Parameter(name = "id", in = ParameterIn.PATH, required = true, schema = @Schema( type = "Long")))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "elimina un objeto en la base de datos",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "el controlador no se encuentra, o no es posible comunicarse con la base de datos",
+                    content = @Content)
+
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         try{
