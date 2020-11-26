@@ -60,3 +60,52 @@ docker run --name "api-container" -d --network net-for-tpa --link mysql-containe
 **Comprabar que todos los contenedores estén corriendo bajo la misma red**
 
 docker network inspect [nombre de la red]
+
+
+## Docker Compose
+
+Crear un archivo .yaml, llamarlo docker-composer.yaml y luego escribir el siguiente código.
+
+version: '3.8'
+services:
+    mysql:
+      image: mysql/mysql-server
+      environment:
+        - MYSQL_DATABASE=api-persona
+        - MYSQL_USER=apipersona
+        - MYSQL_PASSWORD=pwdapi
+        - MYSQL_ROOT_PASSWORD=rootPwd
+      ports:
+        - "3350:3306"
+      container_name: mysql-container
+
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      ports:
+        - 8081:80
+      depends_on:
+        - mysql
+      environment:
+        PMA_HOST: mysql
+      container_name: phpmyadmin-container
+
+    api:
+      image: image-api-persona
+      environment:
+        - DATABASE_USER=apipersona
+        - DATABASE_PASSWORD=pwdapi
+        - DATABASE_NAME=api-persona
+        - DATABASE_HOST=mysql
+        - DATABASE_PORT=3350
+      ports:
+        - 9000:9000
+      depends_on:
+       - mysql
+      container_name: api-container
+
+
+**Correr docker-composer**
+
+docker-compose up -d
+
+Y ya tendrémos nuestros contenedores mysql, phpmyadmin y apirest corriendo bajo la misma red y contenedor general.
